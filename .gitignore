@@ -1,0 +1,5 @@
+.DS_Store
+app/**
+data/**
+python-flask-env/**
+.vscode

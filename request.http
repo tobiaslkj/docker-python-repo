@@ -1,0 +1,100 @@
+@baseurl = http://localhost
+@contentype = Content-Type: application/json
+@operatorauthorization = Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NTUwMDQzNzQsIm5iZiI6MTU1NTAwNDM3NCwianRpIjoiMWI5MDcyZTctMDRmOS00NmM3LWFiZGQtNDk2YmQyMDRhZDRjIiwiZXhwIjoxNTU1MDkwNzc0LCJpZGVudGl0eSI6InMxMjM0NTY3OCIsImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyIsInVzZXJfY2xhaW1zIjp7ImlkIjoxLCJ1c2VySUMiOiJzMTIzNDU2NzgiLCJyb2xlIjoib3BlcmF0b3IiLCJvcGVyYXRvcmlkIjoxLCJ0eXBlIjoib3BlcmF0b3IifX0.t_0jDmqkAsErx7b1zrzUxEidtQveXA5VT7RY6zx7pv0
+@govauthorization = Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NTQzMDgwNjcsIm5iZiI6MTU1NDMwODA2NywianRpIjoiOTNmMzE3M2EtYWNlMS00MTE1LTg2NTMtYjEwODc0MDdiZGY4IiwiZXhwIjoxNTU0Mzk0NDY3LCJpZGVudGl0eSI6IlQ4NzY1NDMyMSIsImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyIsInVzZXJfY2xhaW1zIjp7ImlkIjoyLCJ1c2VySUMiOiJUODc2NTQzMjEiLCJyb2xlIjoiZ292ZXJubWVudCIsImdvdmVybm1lbnRpZCI6MiwidHlwZSI6ImdvdmVybm1lbnQifX0.riIN1DmWy7coV54hrj0uc2i0tNA_Cj_p2d2b4HvfmMU
+
+### Create operator
+POST {{baseurl}}/user/operator HTTP/1.0
+{{contentype}}
+
+{
+	"userIC":"s12345678",
+    "name":"tobias",
+	"password":"Pa$$w0rd!"
+}
+
+### Create government official
+POST {{baseurl}}/user/governmentofficial HTTP/1.0
+{{contentype}}
+
+{
+	"userIC":"T87654321",
+    "name":"Saibot",
+	"password":"Pa$$w0rd!"
+}
+
+### Create Operator Session
+POST {{baseurl}}/session HTTP/1.0
+{{contentype}}
+
+{
+    "userIC":"s12345678",
+    "password":"Pa$$w0rd!"
+}
+
+
+### Create Government Official Session
+POST {{baseurl}}/session HTTP/1.0
+{{contentype}}
+
+{
+    "userIC":"T87654321",
+    "password":"Pa$$w0rd!"
+}
+
+### Check operator session
+GET {{baseurl}}/user/operator HTTP/1.0
+{{contentype}}
+{{operatorauthorization}}
+
+### Check government session
+GET {{baseurl}}/user/governmentofficial HTTP/1.0
+{{contentype}}
+{{govauthorization}}
+
+### Create incident by operator
+POST {{baseurl}}/incident HTTP/1.0
+{{contentype}}
+{{operatorauthorization}}
+
+{
+	"name":"Harrison",
+	"userIC":"S9123124D",
+	"address":"NTU",
+	"mobilePhone":"81234766",
+	"assistance_type": [1,2],
+	"emergency_type": [1,2],
+	"relevant_agencies": [2],
+	"description":"what a nice weather"
+}
+
+### Create incident by GP
+POST {{baseurl}}/gpincident HTTP/1.0
+{{contentype}}
+
+{
+	"name":"Harrison",
+	"userIC":"S9123124D",
+	"address":"NTU",
+	"mobilePhone":"81234766",
+	"assistance_type": [1,2],
+	"emergency_type": [1,2],
+	"relevant_agencies": [2],
+	"description":"help help"
+}
+
+
+###APPROVE incident
+PATCH {{baseurl}}/incident/3 HTTP/1.0
+{{contentype}}
+{{operatorauthorization}}
+
+{
+	"relevant_agencies": [2]
+}
+
+### GET INCIDENT
+GET {{baseurl}}/incident/1 HTTP/1.0
+{{contentype}}
+{{operatorauthorization}}
+

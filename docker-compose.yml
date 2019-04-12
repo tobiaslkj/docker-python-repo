@@ -1,0 +1,50 @@
+version: "3"
+services:
+  flask-app:
+    build: ./bin
+    container_name: 'flask-app-container'
+    restart: 'always'
+    volumes:
+      - ./app:/app
+    links:
+      - mysql-db
+    depends_on:
+      - mysql-db
+    ports:
+      - "80:5000"
+    environment:
+      PYTHONUNBUFFERED: 1
+      DEBUG: 1
+  mysql-db:
+    image: mysql:5.7
+    container_name: 'mysql-container'
+    restart: 'always'
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: 'sc-phpmyadmin'
+    links:
+      - mysql-db
+    environment:
+      PMA_HOST: mysql-db
+      PMA_PORT: 3306
+    ports:
+      - '8080:80'
+  # frontend:
+  #   image: nginx
+  #   container_name: frontend-container
+  #   links:
+  #     - flask-app
+  #   depends_on:
+  #     - flask-app
+  #   ports:
+  #     - '80:80'
+  #   volumes:
+  #     - ./frontend:/usr/share/nginx/html
+
+  
